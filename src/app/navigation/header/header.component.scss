@@ -1,0 +1,35 @@
+#menu-btn {
+  background: none;
+  border: none;
+}
+
+#menu-btn i {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+#logo {
+  margin-left: 10px;
+}
+
+#links-container {
+  li {
+    list-style: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: rgb(238, 237, 237);
+}
+
+@media (max-width: 599px) {
+  a:hover {
+    color: rgb(65, 65, 65);
+  }
+}

@@ -1,0 +1,23 @@
+.training-container {
+  width: 100%;
+  margin-inline: auto;
+}
+
+mat-tab-group {
+  width: 100%;
+}
+
+.test {
+  width: 95%;
+  margin-inline: auto;
+}
+
+.test-2 {
+  width: 100%;
+}
+
+@media (max-width: 400px) {
+  .test-2 {
+    width: 100%;
+  }
+}

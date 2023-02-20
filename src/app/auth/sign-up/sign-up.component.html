@@ -1,0 +1,119 @@
+<!-- <section>
+  <form
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    #f="ngForm"
+    (ngSubmit)="onSubmit(f)"
+  >
+    <mat-form-field>
+      <mat-label
+        [ngStyle]="{
+          color: !emailInput.dirty || emailInput.invalid ? 'red' : 'black'
+        }"
+        >Email</mat-label
+      >
+      <input
+        type="email"
+        matInput
+        ngModel
+        name="email"
+        email
+        required
+        #emailInput="ngModel"
+      />
+      <mat-error
+        *ngIf="emailInput.hasError('required')"
+        [ngStyle]="{ color: 'red' }"
+        >Email is required</mat-error
+      >
+      <mat-error
+        *ngIf="emailInput.invalid && !emailInput.hasError('required')"
+        [ngStyle]="{ color: 'red' }"
+        >Enter a correct email</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        type="password"
+        matInput
+        placeholder="Your password"
+        ngModel
+        name="password"
+        required
+        minlength="6"
+      />
+      <mat-hint>Password must be minimum of 6 characters</mat-hint>
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="accent">Submit</button>
+  </form>
+</section> -->
+
+<section id="form-container">
+  <form
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    [formGroup]="signUpForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+
+      <input
+        type="email"
+        matInput
+        [formControlName]="'email'"
+        [ngClass]="{ errorState: labelEmailColor }"
+      />
+
+      <mat-error *ngIf="emailError" [ngStyle]="{ color: 'red' }"
+        >Email is required</mat-error
+      >
+
+      <mat-error
+        *ngIf="!emailError && this.signUpForm.get('email')?.invalid"
+        [ngStyle]="{ color: 'red' }"
+        >Enter a correct email</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+
+      <input
+        type="password"
+        matInput
+        placeholder="Your password"
+        [formControlName]="'password'"
+        [ngClass]="{ errorState: labelPasswordColor }"
+      />
+      <mat-hint>Password must be minimum of 6 characters</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControlName]="'birthdate'"
+      />
+
+      <mat-hint>MM/DD/YYYY</mat-hint>
+
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <button
+      type="submit"
+      mat-raised-button
+      color="accent"
+      style="margin-top: 20px"
+      [disabled]="signUpForm.invalid"
+    >
+      Submit
+    </button>
+  </form>
+</section>

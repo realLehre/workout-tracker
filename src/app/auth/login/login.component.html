@@ -1,0 +1,52 @@
+<section id="form-container">
+  <form
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+
+      <input
+        type="email"
+        matInput
+        [formControlName]="'email'"
+        [ngClass]="{ errorState: labelEmailColor }"
+      />
+
+      <mat-error *ngIf="emailError" [ngStyle]="{ color: 'red' }"
+        >Email is required</mat-error
+      >
+
+      <mat-error
+        *ngIf="!emailError && this.loginForm.get('email')?.invalid"
+        [ngStyle]="{ color: 'red' }"
+        >Enter a correct email</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+
+      <input
+        type="password"
+        matInput
+        placeholder="Your password"
+        [formControlName]="'password'"
+        [ngClass]="{ errorState: labelPasswordColor }"
+      />
+      <mat-hint>Password must be minimum of 6 characters</mat-hint>
+    </mat-form-field>
+
+    <button
+      type="submit"
+      mat-raised-button
+      color="accent"
+      style="margin-top: 20px"
+      [disabled]="loginForm.invalid"
+    >
+      Login
+    </button>
+  </form>
+</section>

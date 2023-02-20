@@ -1,0 +1,18 @@
+<div class="training-container" fxLayout fxLayoutAlign="center">
+  <mat-tab-group *ngIf="!training">
+    <mat-tab label="New Exercise">
+      <div class="test test-1">
+        <app-new-training></app-new-training>
+      </div>
+    </mat-tab>
+    <mat-tab label="Past Exercise">
+      <div class="test-2">
+        <app-past-trainings></app-past-trainings>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<app-current-training
+  *ngIf="training"
+  (stopTraining)="training = false"
+></app-current-training>

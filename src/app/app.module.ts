@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +21,7 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { NavListsComponent } from './navigation/nav-lists/nav-lists.component';
 import { StopTrainingDialog } from './training/current-training/stop-training-dialog.component';
 import { AuthService } from './services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,11 @@ import { AuthService } from './services/auth.service';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
+
   providers: [AuthService],
   bootstrap: [AppComponent],
   entryComponents: [StopTrainingDialog],

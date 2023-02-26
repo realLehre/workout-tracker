@@ -6,12 +6,17 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private afAuth: AngularFireAuth
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -21,12 +26,19 @@ export class AuthGuard implements CanActivate {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    if (this.auth.isAuthUser()) {
+    let userToken = '';
+
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        userToken = user.refreshToken;
+      }
+    });
+
+    if (localStorage.getItem('user')) {
       return true;
     } else {
-      // this.router.navigate(['/login']);
-      // return false;
-      return true;
+      this.router.navigate(['/login']);
+      return false;
     }
   }
 }

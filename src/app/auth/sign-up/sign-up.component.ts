@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -10,7 +12,11 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private afAuth: AngularFireAuth,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.signUpForm = new FormGroup({
@@ -62,9 +68,21 @@ export class SignUpComponent implements OnInit {
   }
 
   onSubmit() {
-    this.auth.registerUser({
-      email: this.signUpForm.get('email')?.value,
-      password: this.signUpForm.get('password')?.value,
-    });
+    this.auth.loading.next(true);
+    const email = this.signUpForm.get('email')?.value;
+    const password = this.signUpForm.get('password')?.value;
+
+    this.afAuth.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => {
+        this.auth.loading.next(false);
+        this.auth.initAuthenticatedUser();
+      })
+      .catch((error) => {
+        this.auth.loading.next(false);
+        this.snackBar.open(error.message, 'Undo', {
+          duration: 3000,
+        });
+      });
   }
 }

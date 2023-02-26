@@ -4,19 +4,27 @@
       <mat-card-title fxLayoutAlign="center"
         >Time to start a workout</mat-card-title
       >
-      <mat-card-content fxLayoutAlign="center" style="margin-top: 20px">
+
+      <div class="spinner-container" fxLayoutAlign="center" *ngIf="isLoading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-card-content
+        fxLayoutAlign="center"
+        style="margin-top: 20px"
+        *ngIf="!isLoading"
+      >
         <mat-form-field appearance="fill">
           <mat-label>Choose a workout</mat-label>
           <mat-select ngModel name="exerciseSelected" required="">
-            <mat-option
-              *ngFor="let exercise of exercisesSub | async"
-              [value]="exercise.name"
+            <mat-option *ngFor="let exercise of exercises" [value]="exercise.id"
               >{{ exercise.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </mat-card-content>
-      <mat-card-actions fxLayoutAlign="center">
+
+      <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
         <button
           type="submit"
           mat-raised-button

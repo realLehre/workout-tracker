@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { Exercise } from '../exercise.model';
 import { ExerciseService } from '../exercise.service';
@@ -14,7 +12,7 @@ import { ExerciseService } from '../exercise.service';
 })
 export class NewTrainingComponent implements OnInit {
   exercises: Exercise[] = [];
-  exercisesSub!: Observable<any>;
+  isLoading: boolean = false;
 
   constructor(
     private exerciseService: ExerciseService,
@@ -22,9 +20,14 @@ export class NewTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.exercises = this.exerciseService.availableExercises;
-    this.exercisesSub = this.db.collection('AvailableExercises').valueChanges();
+    this.isLoading = true;
+
     this.exerciseService.fetchAvailableExercises();
+
+    this.exerciseService.getAvailableExercisesChanged.subscribe((data) => {
+      this.exercises = data;
+      this.isLoading = false;
+    });
   }
 
   setOnGoingTraining(form: NgForm) {

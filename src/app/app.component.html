@@ -1,12 +1,18 @@
-<mat-sidenav-container>
-  <mat-sidenav #sidenav>
-    <app-nav-lists (closeNav)="sidenav.close()"></app-nav-lists>
-  </mat-sidenav>
+<div class="app-container">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav>
+      <app-nav-lists (closeNav)="sidenav.close()"></app-nav-lists>
+    </mat-sidenav>
 
-  <mat-sidenav-content>
-    <app-header (sideNavToggle)="sidenav.toggle()"></app-header>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <mat-sidenav-content>
+      <app-header (sideNavToggle)="sidenav.toggle()"></app-header>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <div class="spinner-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

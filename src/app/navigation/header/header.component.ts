@@ -24,6 +24,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSub = this.auth.isUser.subscribe((user) => {
       this.isAuth = user;
     });
+
+    if (localStorage.getItem('user') == 'true') {
+      this.isAuth = true;
+    }
   }
 
   onToggle() {
@@ -32,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.auth.logout();
+    localStorage.setItem('user', 'false');
   }
 
   ngOnDestroy(): void {

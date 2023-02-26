@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { Subject, Subscription } from 'rxjs';
+import { ExerciseService } from '../training/exercise.service';
 import { AuthData } from './authData.model';
 import { User } from './user.model';
 
 @Injectable()
 export class AuthService {
-  private user?: User | null;
+  private user!: User | null;
   isUser = new Subject<boolean>();
+  token!: string;
+  loading = new Subject<boolean>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private afAuth: AngularFireAuth,
+    private exerciseService: ExerciseService
+  ) {}
 
   registerUser(data: AuthData) {
     this.authenticateUser(data);
@@ -20,17 +28,33 @@ export class AuthService {
   }
 
   logout() {
+    this.exerciseService.fbSubs.forEach((sub) => {
+      sub.unsubscribe();
+    });
+    this.afAuth.auth.signOut();
     this.user = null;
     this.isUser.next(false);
     this.router.navigate(['/login']);
   }
 
-  getUser() {
-    return { ...this.user };
-  }
+  initAuthenticatedUser() {
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.isUser.next(true);
 
-  isAuthUser() {
-    return this.user != null;
+        this.router.navigate(['/training']);
+
+        this.token = user.refreshToken;
+
+        localStorage.setItem('user', this.token);
+      } else {
+        this.isUser.next(false);
+
+        localStorage.removeItem('user');
+
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   private authenticateUser(data: AuthData) {

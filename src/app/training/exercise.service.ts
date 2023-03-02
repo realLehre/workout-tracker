@@ -110,6 +110,24 @@ export class ExerciseService {
     );
   }
 
+  clearWorkoutHistory() {
+    this.db
+      .collection('finishedExercises')
+      .snapshotChanges()
+      .pipe(
+        map((data: any) => {
+          return data.map((item: any) => {
+            return item.payload.doc.id;
+          });
+        })
+      )
+      .subscribe((data) => {
+        data.forEach((item: any) => {
+          this.db.collection('finishedExercises').doc(item).delete();
+        });
+      });
+  }
+
   private addFinishedExerciseToDatabase(exercise: Exercise) {
     this.db.collection('finishedExercises').add(exercise);
   }

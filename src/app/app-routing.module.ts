@@ -10,7 +10,12 @@ const routes: Routes = [
   { path: '', component: WelcomeComponent },
   { path: 'signup', component: SignUpComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'training', component: TrainingComponent, canActivate: [AuthGuard] },
+  {
+    path: 'training',
+    loadChildren: () =>
+      import('./training/training.module').then((m) => m.TrainingModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { UiLoadingService } from './shared/ui-loading.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,16 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   isLoading: boolean = false;
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private uiLoadingService: UiLoadingService
+  ) {}
 
   ngOnInit(): void {
     this.authService.initAuthenticatedUser();
-    this.authService.loading.subscribe((status) => {
-      this.isLoading = status;
+
+    this.uiLoadingService.isLoading.subscribe((value) => {
+      this.isLoading = value;
     });
   }
 }

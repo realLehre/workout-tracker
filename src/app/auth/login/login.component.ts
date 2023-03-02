@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from 'src/app/services/auth.service';
+import { UiLoadingService } from 'src/app/shared/ui-loading.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private afAuth: AngularFireAuth,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private uiLoadingService: UiLoadingService
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,7 @@ export class LoginComponent implements OnInit {
     return;
   }
   onSubmit() {
-    this.auth.loading.next(true);
+    this.uiLoadingService.changeLoadingState(true);
 
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
@@ -76,11 +78,11 @@ export class LoginComponent implements OnInit {
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
         if (res) {
-          this.auth.loading.next(false);
+          this.uiLoadingService.changeLoadingState(false);
         }
       })
       .catch((error) => {
-        this.auth.loading.next(false);
+        this.uiLoadingService.changeLoadingState(false);
         this.snackBar.open(error.message, 'Undo', {
           duration: 3000,
         });

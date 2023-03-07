@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AuthService } from 'src/app/services/auth.service';
+
 import { UiLoadingService } from 'src/app/shared/ui-loading.service';
+import { startLoading, stopLoading } from 'src/app/shared/ui.actions';
+import * as fromApp from '../../state management/app.reducer';
 
 @Component({
   selector: 'app-login',
@@ -15,10 +18,10 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private auth: AuthService,
     private afAuth: AngularFireAuth,
     private snackBar: MatSnackBar,
-    private uiLoadingService: UiLoadingService
+    private uiLoadingService: UiLoadingService,
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +72,7 @@ export class LoginComponent implements OnInit {
     return;
   }
   onSubmit() {
-    this.uiLoadingService.changeLoadingState(true);
+    this.store.dispatch(startLoading());
 
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
@@ -78,11 +81,12 @@ export class LoginComponent implements OnInit {
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
         if (res) {
-          this.uiLoadingService.changeLoadingState(false);
+          this.store.dispatch(stopLoading());
         }
       })
       .catch((error) => {
-        this.uiLoadingService.changeLoadingState(false);
+        this.store.dispatch(stopLoading());
+
         this.snackBar.open(error.message, 'Undo', {
           duration: 3000,
         });

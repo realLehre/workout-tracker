@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { AuthService } from './services/auth.service';
-import { UiLoadingService } from './shared/ui-loading.service';
+import { startLoading } from './shared/ui.actions';
+import * as fromApp from './state management/app.reducer';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +12,17 @@ import { UiLoadingService } from './shared/ui-loading.service';
 })
 export class AppComponent implements OnInit {
   isLoading: boolean = false;
+
   constructor(
     private authService: AuthService,
-    private uiLoadingService: UiLoadingService
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit(): void {
     this.authService.initAuthenticatedUser();
 
-    this.uiLoadingService.isLoading.subscribe((value) => {
-      this.isLoading = value;
+    this.store.select(fromApp.getUiState).subscribe((value) => {
+      this.isLoading = value.isLoading;
     });
   }
 }

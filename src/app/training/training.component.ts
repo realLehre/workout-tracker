@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { ExerciseService } from './exercise.service';
+import * as fromTraining from '../training/training state/training.reducer';
+import * as fromTrainingActions from '../training/training state/training.actions';
 
 @Component({
   selector: 'app-training',
@@ -10,7 +14,10 @@ import { ExerciseService } from './exercise.service';
 export class TrainingComponent implements OnInit {
   training: boolean = false;
 
-  constructor(private exerciseService: ExerciseService) {}
+  constructor(
+    private exerciseService: ExerciseService,
+    private store: Store<fromTraining.State>
+  ) {}
 
   ngOnInit(): void {
     this.exerciseService.getRunningExercise.subscribe({
@@ -22,5 +29,7 @@ export class TrainingComponent implements OnInit {
         }
       },
     });
+
+    this.store.dispatch(fromTrainingActions.getAvailableExercises());
   }
 }

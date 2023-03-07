@@ -56,7 +56,29 @@ export class ExerciseService {
     );
   }
 
+  getAvailableTrainings() {
+    return this.db
+      .collection('AvailableExercises')
+      .snapshotChanges()
+      .pipe(
+        map((data: any) => {
+          return data.map((item: any) => {
+            return {
+              id: item.payload.doc.id,
+              name: item.payload.doc.data().name,
+              calories: item.payload.doc.data().calories,
+              duration: item.payload.doc.data().duration,
+            };
+          });
+        })
+      );
+  }
+
   getCurrentExercise(id: string) {
+    this.getAvailableTrainings().subscribe((exercises) => {
+      this.availableExercises = exercises;
+    });
+
     this.availableExercises.find((exercise) => {
       if (exercise.id == id) {
         this.getRunningExercise.next({ ...exercise });

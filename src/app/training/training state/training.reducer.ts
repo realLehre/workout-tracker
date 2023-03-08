@@ -57,7 +57,11 @@ export const trainingReducer = createReducer(
   on(fromTrainingActions.getCurrentExercise, (state, action) => {
     return {
       ...state,
-      activeTraining: action.exercise,
+      activeTraining: {
+        ...state.availableExercises.find(
+          (exercise) => exercise.id == action.id
+        ),
+      },
     };
   })
 );

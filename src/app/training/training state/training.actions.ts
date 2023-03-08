@@ -17,7 +17,7 @@ export const getFinshedExercises = createAction(
 
 export const getCurrentExercise = createAction(
   '[Training] get current exercises',
-  props<{ exercise: Exercise }>()
+  props<{ id: string }>()
 );
 
 export const startTraining = createAction('[Training] start training');
